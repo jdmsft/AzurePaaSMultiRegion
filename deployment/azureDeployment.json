@@ -123,24 +123,24 @@
       "[parameters('regionSecondary')]"
     ],
     "webAppStage": [
-      "Primary",
-      "Secondary"
+      "primary",
+      "secondary"
     ],
     // SQL Database
     "sqlServerPrimaryName": "[toLower(concat(parameters('solutionName'), '-sqlsrv-primary'))]",
     "sqlServerSecondaryName": "[toLower(concat(parameters('solutionName'), '-sqlsrv-secondary'))]",
-    "sqlFailoverGroupName": "[toLower(concat(parameters('solutionName'), '-sqlfg'))]",
-    "sqlDatabaseName": "[toLower(concat(parameters('solutionName'),'-sqldb'))]",
+    "sqlFailoverGroupName": "[parameters('solutionName')]",
+    "sqlDatabaseName": "[parameters('solutionName')]",
     "sqlDatabaseServiceObjective": "Basic",
     "sqlDatabaseEdition": "Basic",
     "singleQout": " ' ",
     // EventHub
     "eventHubName": "[toLower(concat(parameters('solutionName'),'-eventhub'))]",
-    "eventHubNamespaceName": "[toLower(concat(parameters('solutionName'),'-eventhub-ns1'))]",
+    "eventHubNamespaceName": "[toLower(concat(parameters('solutionName'),'-eventhub-namespace'))]",
     "eventhubAuthorizationRuleName": "RootManageSharedAccessKey",
     //Traffic Manager
-    "trafficManagerName": "[toLower(concat(parameters('solutionName'),'-tm'))]",
-    "diagnosticLogName": "[toLower(concat(parameters('solutionName'),'-tm-diaglog'))]",
+    "trafficManagerName": "[parameters('solutionName')]",
+    "diagnosticLogName": "DiagLogToEventHub",
     // Stream Analytics
     "streamName": "[toLower(concat(parameters('solutionName'),'-stream'))]",
     // GitHub
@@ -151,7 +151,7 @@
     //App Service Plan
     {
       "apiVersion": "2015-08-01",
-      "name": "[concat('AppSvcPlan', variables('webAppStage')[copyIndex()])]",
+      "name": "[concat(parameters('solutionName'), '-asp-', variables('webAppStage')[copyIndex()])]",
       "type": "Microsoft.Web/serverfarms",
       "copy": {
         "name": "farmloop",
@@ -174,10 +174,10 @@
       },
       "location": "[variables('webAppLocations')[copyIndex()]]",
       "dependsOn": [
-        "[concat('AppSvcPlan', variables('webAppStage')[copyIndex()])]"
+        "[concat(parameters('solutionName'), '-asp-', variables('webAppStage')[copyIndex()])]"
       ],
       "properties": {
-        "serverFarmId": "[concat('AppSvcPlan', variables('webAppStage')[copyIndex()])]"
+        "serverFarmId": "[concat(parameters('solutionName'), '-asp-', variables('webAppStage')[copyIndex()])]"
       },
       "resources": [
         {
@@ -186,7 +186,7 @@
           "apiVersion": "2015-08-01",
           "comments": "These are the default appsettings configured on the both web apps.",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms', concat('AppSvcPlan', variables('webAppStage')[copyIndex()]))]",
+            "[resourceId('Microsoft.Web/serverfarms', concat(parameters('solutionName'), '-asp-', variables('webAppStage')[copyIndex()]))]",
             "[resourceId('Microsoft.Web/Sites', concat(parameters('solutionName'), variables('webAppStage')[copyIndex()]))]"
           ],
           "properties": {
@@ -223,69 +223,6 @@
           }
         }
       ]
-    },
-    // EventHub
-    {
-      "type": "Microsoft.EventHub/namespaces",
-      "apiVersion": "2018-01-01-preview",
-      "name": "[variables('eventHubNamespaceName')]",
-      "location": "[variables('webAppLocations')[0]]",
-      "sku": {
-        "name": "Basic",
-        "tier": "Basic",
-        "capacity": 1
-      },
-      "properties": {
-        "zoneRedundant": false,
-        "isAutoInflateEnabled": false,
-        "maximumThroughputUnits": 0,
-        "kafkaEnabled": false
-      }
-    },
-    {
-      "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
-      "apiVersion": "2017-04-01",
-      "name": "[concat(variables('eventHubNamespaceName'), '/RootManageSharedAccessKey')]",
-      "location": "[variables('webAppLocations')[0]]",
-      "dependsOn": [
-        "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespaceName'))]"
-      ],
-      "properties": {
-        "rights": [
-          "Listen",
-          "Manage",
-          "Send"
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.EventHub/namespaces/eventhubs",
-      "apiVersion": "2017-04-01",
-      "name": "[concat(variables('eventHubNamespaceName'), '/', variables('eventHubName'))]",
-      "location": "[variables('webAppLocations')[0]]",
-      "dependsOn": [
-        "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespaceName'))]"
-      ],
-      "properties": {
-        "messageRetentionInDays": 1,
-        "partitionCount": 2,
-        "status": "Active"
-      }
-    },
-    {
-      "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
-      "apiVersion": "2017-04-01",
-      "name": "[concat(variables('eventHubNamespaceName'), '/', variables('eventHubName'), '/PreviewDataPolicy')]",
-      "location": "[variables('webAppLocations')[0]]",
-      "dependsOn": [
-        "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespaceName'), variables('eventHubName'))]",
-        "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespaceName'))]"
-      ],
-      "properties": {
-        "rights": [
-          "Listen"
-        ]
-      }
     },
     // Traffic Manager
     {
@@ -343,7 +280,7 @@
         "endpointStatus": "Enabled",
         "priority": 2
       }
-    },
+    },/*
     {
       "type": "Microsoft.Network/trafficManagerProfiles/providers/diagnosticSettings",
       "apiVersion": "2017-05-01-preview",
@@ -376,6 +313,7 @@
         ]
       }
     },
+    */
     // SQL Database
     {
       "type": "Microsoft.Sql/servers",
@@ -470,7 +408,71 @@
           }
         }
       ]
+    } /*,
+    // EventHub
+    {
+      "type": "Microsoft.EventHub/namespaces",
+      "apiVersion": "2018-01-01-preview",
+      "name": "[variables('eventHubNamespaceName')]",
+      "location": "[variables('webAppLocations')[0]]",
+      "sku": {
+        "name": "Basic",
+        "tier": "Basic",
+        "capacity": 1
+      },
+      "properties": {
+        "zoneRedundant": false,
+        "isAutoInflateEnabled": false,
+        "maximumThroughputUnits": 0,
+        "kafkaEnabled": false
+      }
     },
+    {
+      "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(variables('eventHubNamespaceName'), '/RootManageSharedAccessKey')]",
+      "location": "[variables('webAppLocations')[0]]",
+      "dependsOn": [
+        "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespaceName'))]"
+      ],
+      "properties": {
+        "rights": [
+          "Listen",
+          "Manage",
+          "Send"
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.EventHub/namespaces/eventhubs",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(variables('eventHubNamespaceName'), '/', variables('eventHubName'))]",
+      "location": "[variables('webAppLocations')[0]]",
+      "dependsOn": [
+        "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespaceName'))]"
+      ],
+      "properties": {
+        "messageRetentionInDays": 1,
+        "partitionCount": 2,
+        "status": "Active"
+      }
+    },
+    {
+      "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(variables('eventHubNamespaceName'), '/', variables('eventHubName'), '/PreviewDataPolicy')]",
+      "location": "[variables('webAppLocations')[0]]",
+      "dependsOn": [
+        "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespaceName'), variables('eventHubName'))]",
+        "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespaceName'))]"
+      ],
+      "properties": {
+        "rights": [
+          "Listen"
+        ]
+      }
+    },
+    // Stream
     {
       "type": "Microsoft.StreamAnalytics/streamingjobs",
       "apiVersion": "2016-03-01",
@@ -524,6 +526,6 @@
         "outputs": [
         ]
       }
-    }
+    }*/
   ]
 }
