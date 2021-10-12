@@ -166,7 +166,7 @@
     // App Service (WebApp)
     {
       "apiVersion": "2015-08-01",
-      "name": "[concat(parameters('solutionName'), variables('webAppStage')[copyIndex()])]",
+      "name": "[concat(parameters('solutionName'), '-', variables('webAppStage')[copyIndex()])]",
       "type": "Microsoft.Web/sites",
       "copy": {
         "name": "siteloop",
