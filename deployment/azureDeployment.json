@@ -320,7 +320,7 @@
       "kind": "v12.0",
       "name": "[variables('sqlServerPrimaryName')]",
       "apiVersion": "2019-06-01-preview",
-      "location": "[variables('webAppLocations')[1]]",
+      "location": "[variables('webAppLocations')[0]]",
       "properties": {
         "administratorLogin": "[parameters('sqlServerAdminLogin')]",
         "administratorLoginPassword": "[parameters('sqlServerAdminPassword')]",
@@ -331,7 +331,7 @@
           "type": "firewallrules",
           "apiVersion": "2015-05-01-preview",
           "name": "AllowAllAzureIps",
-          "location": "[variables('webAppLocations')[1]]",
+          "location": "[variables('webAppLocations')[0]]",
           "dependsOn": [
             "[variables('sqlServerPrimaryName')]"
           ],
@@ -344,7 +344,7 @@
           "name": "[variables('sqlDatabaseName')]",
           "type": "databases",
           "apiVersion": "2019-06-01-preview",
-          "location": "[variables('webAppLocations')[1]]",
+          "location": "[variables('webAppLocations')[0]]",
           "dependsOn": [
             "[variables('sqlServerPrimaryName')]"
           ],
@@ -387,7 +387,7 @@
       "kind": "v12.0",
       "name": "[variables('sqlServerSecondaryName')]",
       "apiVersion": "2019-06-01-preview",
-      "location": "[variables('webAppLocations')[0]]",
+      "location": "[variables('webAppLocations')[1]]",
       "properties": {
         "administratorLogin": "[parameters('sqlServerAdminLogin')]",
         "administratorLoginPassword": "[parameters('sqlServerAdminPassword')]",
@@ -398,7 +398,7 @@
           "type": "firewallrules",
           "apiVersion": "2015-05-01-preview",
           "name": "AllowAllAzureIps",
-          "location": "[variables('webAppLocations')[0]]",
+          "location": "[variables('webAppLocations')[1]]",
           "dependsOn": [
             "[variables('sqlServerSecondaryName')]"
           ],
