@@ -11,6 +11,9 @@
       "regionPrimary": {
         "type": "string",
         "allowedValues": [
+          "France Central",
+          "North Europe",
+          "West Europe",
           "East Asia",
           "Southeast Asia",
           "Central US",
@@ -19,8 +22,6 @@
           "West US",
           "North Central US",
           "South Central US",
-          "North Europe",
-          "West Europe",
           "Japan West",
           "Japan East",
           "Brazil South",
@@ -37,7 +38,6 @@
           "West US 2",
           "Korea Central",
           "Korea South",
-          "France Central",
           "Australia Central",
           "Australia Central 2",
           "UAE Central",
@@ -58,6 +58,9 @@
     "regionSecondary": {
       "type": "string",
       "allowedValues": [
+        "France Central",
+        "North Europe",
+        "West Europe",
         "East Asia",
         "Southeast Asia",
         "Central US",
@@ -66,8 +69,6 @@
         "West US",
         "North Central US",
         "South Central US",
-        "North Europe",
-        "West Europe",
         "Japan West",
         "Japan East",
         "Brazil South",
@@ -84,7 +85,6 @@
         "West US 2",
         "Korea Central",
         "Korea South",
-        "France Central",
         "Australia Central",
         "Australia Central 2",
         "UAE Central",
@@ -263,7 +263,7 @@
       "properties": {
         "targetResourceId": "[resourceId('Microsoft.Web/sites/', concat(parameters('solutionName'), variables('webAppStage')[1]))]",
         "endpointStatus": "Enabled",
-        "priority": 1
+        "priority": 2
       }
     },
     {
@@ -278,7 +278,7 @@
       "properties": {
         "targetResourceId": "[resourceId('Microsoft.Web/sites/', concat(parameters('solutionName'), variables('webAppStage')[0]))]",
         "endpointStatus": "Enabled",
-        "priority": 2
+        "priority": 1
       }
     },/*
     {
