@@ -204,7 +204,7 @@
           "properties": {
             "RepoUrl": "[variables('sourceCodeRepositoryURL')]",
             "branch": "[variables('sourceCodeBranch')]",
-            "IsManualIntegration": "true"
+            "IsManualIntegration": true
           }
         },
         {
