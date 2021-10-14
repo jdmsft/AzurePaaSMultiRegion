@@ -58,7 +58,3 @@ GO
 ALTER TABLE [dbo].[Order] ADD  CONSTRAINT [DF_Order_OrderDateTime]  DEFAULT (getdate()) FOR [OrderDateTime]
 GO
 ````
-
-## Known issues
-
-Please refer to the [known issues](known-issue.md) doc in case you've encontered any issue.
