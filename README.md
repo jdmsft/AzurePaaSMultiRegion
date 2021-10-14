@@ -1,10 +1,25 @@
-# Azure PaaS Multi Region DEMO
+# Azure PaaS Multi-Region Failover Simulator (BETA)
 
-![Solution Architecture](media/solution-architecture.png)
+In this solution, the applications have the following characteristics:
+
+* Application is active in one Azure region
+* All database sessions require read and write access (RW) to data
+* Web tier and data tier must be collocated to reduce latency and traffic cost
+* Fundamentally, downtime is a higher business risk for these applications than data loss
+
+## Solution architecture
+
+### Normal behavior
+
+![Architecture](media/archi-1.png)
+
+### During a region outage
+
+![Architecture](media/archi-2.png)
 
 ## Deployment
 
-Click below button to automatically deploy your instances using Azure ARM Template:
+Click below button to automatically deploy this solution architecture using Azure ARM Template:
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjdmsft%2FAzurePaaSMultiRegion%2Fmaster%2Fdeployment%2FazureDeployment.json" target="_blank"><img src="https://aka.ms/deploytoazurebutton"/></a>
 
