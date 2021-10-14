@@ -9,11 +9,13 @@ In this solution, the applications have the following characteristics:
 
 ## Solution architecture
 
-### Normal behavior
+This active/passive solution architcecture is based on Scenario 1 of **[Designing globally available services using Azure SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/database/designing-cloud-solutions-for-disaster-recovery)** from Microsoft Docs.
+
+### Before a region outage (normal behavior)
 
 ![Architecture](media/archi-1.png)
 
-### During a region outage
+### During a region outage (after a failover)
 
 ![Architecture](media/archi-2.png)
 
@@ -24,6 +26,9 @@ Click below button to automatically deploy this solution architecture using Azur
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjdmsft%2FAzurePaaSMultiRegion%2Fmaster%2Fdeployment%2FazureDeployment.json" target="_blank"><img src="https://aka.ms/deploytoazurebutton"/></a>
 
 ## Import database data
+
+* From Azure SQL Server  firewall settings : allow your Client IP address
+* From Azure SQL Database query editor : run the code below:
 
 ````sql
 SET ANSI_NULLS ON
